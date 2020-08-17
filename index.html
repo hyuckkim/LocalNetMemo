@@ -1,0 +1,99 @@
+<!doctype html>
+<head>
+<title>nano memo</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script>
+<script type="text/javascript">
+</script>
+<style>
+.button{
+width:150px;
+height:50px;
+}
+.text{
+  width:300px;
+  height:500px;
+  font-size:20px;
+}
+#check-text{
+display:inline;
+}
+@media ( min-width: 1024px ){
+.button{
+width:150px;
+height:50px;
+}
+.text{
+  width:500px;
+  height:800px;
+  font-size:20px;
+}
+}
+</style>
+<script>
+var alreadyyet = "";
+    function msg(){
+        alert(document.getElementById("input").value);
+        document.getElementById("input").value = "";
+    }
+  function InputRequest() {
+    str = document.getElementById("input").value;
+    httpRequest = new XMLHttpRequest();
+    httpRequest.onreadystatechange = alertContents;
+    httpRequest.open('POST', 'input.php');
+    httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    httpRequest.send('str=' + encodeURIComponent(str));
+  }
+  function OutputRequest() {
+    str = document.getElementById("input").value;
+    httpRequest = new XMLHttpRequest();
+    httpRequest.onreadystatechange = alertContents;
+    httpRequest.open('POST', 'output.php');
+    httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    httpRequest.send('str=' + encodeURIComponent(str));
+  }
+  function CheckRequest() {
+    str = document.getElementById("input").value;
+    httpRequest = new XMLHttpRequest();
+    httpRequest.onreadystatechange = CheckContents;
+    httpRequest.open('POST', 'output.php');
+    httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    httpRequest.send('str=' + encodeURIComponent(str));
+  }
+  function alertContents() {
+    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+      if (httpRequest.status === 200) {
+        document.getElementById("input").value = httpRequest.responseText;
+        alreadyyet = httpRequest.responseText;
+      }
+    }
+  }
+  function CheckContents() {
+    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+      if (httpRequest.status === 200) {
+        if(alreadyyet == httpRequest.responseText){
+            $("#check-text").text("모든 데이터를 읽었습니다.");
+        }
+        else{
+            $("#check-text").text("현재 데이터와 서버의 데이터가 다릅니다.");
+        }
+      }
+    }
+  }
+</script>
+</head>
+<body> 
+       <form action="url" method="GET">
+            <input type="button" class="button" value="저장하기" onclick="InputRequest()"/>
+            <input type="button" class="button" value="불러오기" onclick="OutputRequest()"/>
+            <br/>
+            <input type="button" class="subbutton" value="서버 내용 확인하기" onclick="CheckRequest()"/>
+            <div id="check-text"></div>
+            <br/>
+            <textarea type="text" class="text" id="input"></textarea>
+            <br/>
+        </form>
+</form>
+</body>
+</html>
