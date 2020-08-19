@@ -43,7 +43,7 @@ var alreadyyet = "";
     httpRequest.onreadystatechange = alertContents;
     httpRequest.open('POST', 'input.php');
     httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    httpRequest.send('str=' + encodeURIComponent(str));
+    httpRequest.send('str=' + encodeURIComponent(str)+"&url=" + location.hash);
   }
   function OutputRequest() {
     str = document.getElementById("input").value;
@@ -51,7 +51,7 @@ var alreadyyet = "";
     httpRequest.onreadystatechange = alertContents;
     httpRequest.open('POST', 'output.php');
     httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    httpRequest.send('str=' + encodeURIComponent(str));
+    httpRequest.send('str=' + encodeURIComponent(str)+"&url=" + location.hash);
   }
   function CheckRequest() {
     str = document.getElementById("input").value;
@@ -59,8 +59,13 @@ var alreadyyet = "";
     httpRequest.onreadystatechange = CheckContents;
     httpRequest.open('POST', 'output.php');
     httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    httpRequest.send('str=' + encodeURIComponent(str));
+    httpRequest.send('str=' + encodeURIComponent(str)+"&url=" + location.hash);
   }
+    function MoveChannal(){
+        if(document.getElementById("channal-check").value != "")
+            location.href="#" + document.getElementById("channal-check").value;
+        else location.href="";
+    }
   function alertContents() {
     if (httpRequest.readyState === XMLHttpRequest.DONE) {
       if (httpRequest.status === 200) {
@@ -90,6 +95,9 @@ var alreadyyet = "";
             <br/>
             <input type="button" class="subbutton" value="서버 내용 확인하기" onclick="CheckRequest()"/>
             <div id="check-text"></div>
+            <br/>
+            <input type="text" id = "channal-check" placeholder="사용할 채널 입력"/>
+            <input type="button" class="subbutton" value="이동" onclick="MoveChannal()"/>
             <br/>
             <textarea type="text" class="text" id="input"></textarea>
             <br/>
